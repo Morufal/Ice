@@ -1,0 +1,120 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install face_recognition\n",
+        "import face_recognition\n",
+        "import cv2\n",
+        "import numpy as np # Import numpy\n",
+        "\n",
+        "# Load the facial recognition model\n",
+        "face_rec_model = face_recognition.face_recognition_model_v1( # Rename model to face_rec_model\n",
+        "    face_recognition_models.face_recognition_model_location()\n",
+        ")\n",
+        "known_faces = face_recognition.load_known_faces()\n",
+        "\n",
+        "\n",
+        "\n",
+        "# Initialize the camera\n",
+        "cam = cv2.VideoCapture(0)\n",
+        "\n",
+        "# Set the camera resolution\n",
+        "cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)\n",
+        "cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)\n",
+        "\n",
+        "\n",
+        "while True:\n",
+        "    # Capture frame-by-frame\n",
+        "    ret, frame = cam.read()\n",
+        "\n",
+        "    # Convert the frame to RGB\n",
+        "    rgb_frame = frame[:, :, ::-1]\n",
+        "\n",
+        "    # Detect faces in the frame\n",
+        "    face_locations = face_recognition.face_locations(rgb_frame)\n",
+        "\n",
+        "    # Loop through each face\n",
+        "    for face_location in face_locations:\n",
+        "        # Extract the face\n",
+        "        face = rgb_frame[face_location[0]:face_location[1], face_location[2]:face_location[3]]\n",
+        "\n",
+        "        # Convert the face to a numpy array\n",
+        "        face_array = np.array(face)\n",
+        "\n",
+        "        # Use the facial recognition model to identify the face\n",
+        "        face_encoding = model.encode(face_array)\n",
+        "\n",
+        "        # Compare the face encoding to the known faces\n",
+        "        matches = face_recognition.compare_faces(known_faces, face_encoding)\n",
+        "\n",
+        "        # If there is a match, print the name\n",
+        "        if matches[0]:\n",
+        "            print(\"Match found!\")\n",
+        "        else:\n",
+        "            print(\"No match found.\")\n",
+        "\n",
+        "    # Display the frame\n",
+        "    cv2.imshow('camera', frame)\n",
+        "\n",
+        "    # Press 'ESC' to exit\n",
+        "    if cv2.waitKey(10) & 0xff == 27:\n",
+        "        break\n",
+        "\n",
+        "# Release the camera\n",
+        "cam.release()\n",
+        "cv2.destroyAllWindows()\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 584
+        },
+        "id": "ntHeZeKxHiom",
+        "outputId": "f5fd5207-4861-41dc-908b-49007414f340"
+      },
+      "execution_count": 25,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: face_recognition in /usr/local/lib/python3.10/dist-packages (1.3.0)\n",
+            "Requirement already satisfied: face-recognition-models>=0.3.0 in /usr/local/lib/python3.10/dist-packages (from face_recognition) (0.3.0)\n",
+            "Requirement already satisfied: Click>=6.0 in /usr/local/lib/python3.10/dist-packages (from face_recognition) (8.1.7)\n",
+            "Requirement already satisfied: dlib>=19.7 in /usr/local/lib/python3.10/dist-packages (from face_recognition) (19.24.4)\n",
+            "Requirement already satisfied: numpy in /usr/local/lib/python3.10/dist-packages (from face_recognition) (1.25.2)\n",
+            "Requirement already satisfied: Pillow in /usr/local/lib/python3.10/dist-packages (from face_recognition) (9.4.0)\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "RuntimeError",
+          "evalue": "Error while calling cudaGetDevice(&the_device_id) in file /tmp/pip-install-6hth9jdy/dlib_f750fe64b0cc474ab353e1382f2f9f50/dlib/cuda/gpu_data.cpp:204. code: 35, reason: CUDA driver version is insufficient for CUDA runtime version",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mRuntimeError\u001b[0m                              Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-25-469f00dc3a27>\u001b[0m in \u001b[0;36m<cell line: 2>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mget_ipython\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msystem\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'pip install face_recognition'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0;32mimport\u001b[0m \u001b[0mface_recognition\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mcv2\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mnumpy\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0mnp\u001b[0m \u001b[0;31m# Import numpy\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/face_recognition/__init__.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0m__version__\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m'1.2.3'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 7\u001b[0;31m \u001b[0;32mfrom\u001b[0m \u001b[0;34m.\u001b[0m\u001b[0mapi\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mload_image_file\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mface_locations\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mbatch_face_locations\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mface_landmarks\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mface_encodings\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcompare_faces\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mface_distance\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/face_recognition/api.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m     24\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     25\u001b[0m \u001b[0mcnn_face_detection_model\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mface_recognition_models\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcnn_face_detector_model_location\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 26\u001b[0;31m \u001b[0mcnn_face_detector\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdlib\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcnn_face_detection_model_v1\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mcnn_face_detection_model\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     27\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     28\u001b[0m \u001b[0mface_recognition_model\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mface_recognition_models\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mface_recognition_model_location\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mRuntimeError\u001b[0m: Error while calling cudaGetDevice(&the_device_id) in file /tmp/pip-install-6hth9jdy/dlib_f750fe64b0cc474ab353e1382f2f9f50/dlib/cuda/gpu_data.cpp:204. code: 35, reason: CUDA driver version is insufficient for CUDA runtime version"
+          ]
+        }
+      ]
+    }
+  ]
+}
